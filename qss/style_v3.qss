@@ -1,0 +1,70 @@
+QPushButton#pushButton_9 {
+    background-color: transparent;
+}
+
+QPushButton#pushButton_8 {
+    background-color: transparent;
+}
+
+QPushButton#pushButton_10 {
+    background-color: transparent;
+}
+
+QPushButton#pushButton_2 {
+    padding: 20px;
+}
+
+QPushButton#pushButton_7 {
+    padding: 15px;
+    background-color: transparent;
+    border: 0px;
+}
+
+QPushButton#pushButton_stop {
+    padding: 15px;
+    background-color: transparent;
+    border: 0px;
+}
+
+QPushButton#pushButton_2 {
+    padding: 15px;
+    background-color: transparent;
+    border: 0px;
+}
+
+QGroupBox#groupBox {
+    background-color: transparent;
+    border: 0px;
+}
+
+QPushButton#pushButton_12 {
+    padding: 15px;
+    background-color: transparent;
+    border: 0px;
+}
+
+QPushButton#pushButton_2:pressed {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:3,stop:0 #FFFFFF,stop:.9 transparent);
+    border-radius: 15px;
+}
+
+QPushButton#pushButton_7:pressed {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:3,stop:0 #FFFFFF,stop:.9 transparent);
+    border-radius: 25px;
+}
+
+QPushButton#pushButton_stop:pressed {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:3,stop:0 #FFFFFF,stop:.9 transparent);
+    border-radius: 25px;
+}
+
+QPushButton#pushButton_12:pressed {
+    border-radius: 15px;
+    color: white;
+    border: 0px;
+}
+
+QTableWidget{
+    margin: 0px;
+    border: 0px;
+}

@@ -1,0 +1,8 @@
+# The third-part libs
+
+PySerial==3.5
+xlrd==1.2.0
+PyQt5==5.15.4
+xlwt==1.3.0
+qtawesome
+pyqt5_plugins==5.15.9.2.3

@@ -1,0 +1,67 @@
+QPushButton:hover{
+        background-color: blue;
+        border-radius:5px;
+        border-color: blue;
+        border-style:outset;
+        border:10px white;
+        color:white;
+        width: 100px;
+        height: 150px;
+        border-radius: 7px;
+}
+
+QPushButton:default {
+    border-color: red;
+}
+
+QPushButton#pushButton {
+    width: 50px;
+    height: 100px;
+    background-color: transparent;
+    border: none;
+}
+
+QPushButton#status_button {
+    background-color: transparent;
+}
+QLabel#label_11 {
+    color: green;
+}
+
+QPushButton#pushButton_label {
+    text_align: right;
+    width: 50px;
+    height: 100px;
+    background-color: transparent;
+    border: none;
+}
+
+QPushButton {
+    width: 15px;
+    height: 20px;
+}
+
+QLineEdit {
+    width: 15px;
+    height: 20px;
+}
+
+QLineEdit:focus {
+    width: 25px;
+    height: 35px;
+}
+
+QGroupBox {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #E0E0E0, stop: 1 #FFFFFF);
+    border: 2px solid gray;
+    border-radius: 5px;
+    margin-top: 1ex;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 0 3px;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #CCCCCC, stop: 1 #FFFFFF);
+    padding-top: 5px;
+    border-radius:5px;
+}

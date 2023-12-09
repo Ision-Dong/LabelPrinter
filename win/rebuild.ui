@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LabelPrinter</class>
+ <widget class="QMainWindow" name="LabelPrinter">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1174</width>
+    <height>682</height>
+   </rect>
+  </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>1158</width>
+      <height>631</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="3">
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>Test Count</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="5">
+          <widget class="QLineEdit" name="lineEdit_13"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>Close Delay</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEdit_11"/>
+         </item>
+         <item row="0" column="3">
+          <widget class="QLineEdit" name="lineEdit_12"/>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>Open Delay</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QPushButton" name="pushButton_7">
+           <property name="text">
+            <string>Authorize</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="lineEdit_10"/>
+         </item>
+         <item row="0" column="4">
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>Return Delay</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4" colspan="2">
+          <widget class="QPushButton" name="pushButton_9">
+           <property name="text">
+            <string>Test Start</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="QPushButton" name="pushButton_8">
+           <property name="text">
+            <string>Reserve</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Printer COM</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Baud Rate</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QPushButton" name="pushButton">
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Load Data</string>
+           </property>
+           <property name="autoRepeat">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QLineEdit" name="lineEdit_2"/>
+         </item>
+         <item row="2" column="2" colspan="2">
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="text">
+            <string>Print</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="QLineEdit" name="lineEdit_4"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>DataFile Path</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>TailLock COM</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Baud Rate</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="comboBox_2"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="comboBox_3"/>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="2">
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="1" column="3">
+          <widget class="QLineEdit" name="lineEdit_8"/>
+         </item>
+         <item row="0" column="3">
+          <widget class="QLineEdit" name="lineEdit_6"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEdit_7"/>
+         </item>
+         <item row="1" column="5">
+          <widget class="QComboBox" name="comboBox"/>
+         </item>
+         <item row="2" column="1" colspan="7">
+          <widget class="QLineEdit" name="lineEdit_9"/>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="lineEdit_5"/>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Text Y</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_10">
+           <property name="text">
+            <string>Model Number</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Text X</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>QR Size</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>QR Y</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>QR X</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="6">
+          <widget class="QPushButton" name="pushButton_3">
+           <property name="text">
+            <string>Set</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QGridLayout" name="gridLayout_6">
+       <item row="1" column="0">
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <widget class="QTabWidget" name="DataShow">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="QWidget" name="tab_0">
+            <attribute name="title">
+             <string>Date Show</string>
+            </attribute>
+            <widget class="QTableWidget" name="tableWidget">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>-10</y>
+               <width>1341</width>
+               <height>721</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_4">
+             <property name="geometry">
+              <rect>
+               <x>1030</x>
+               <y>480</y>
+               <width>51</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>STATUS</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_5">
+             <property name="geometry">
+              <rect>
+               <x>1090</x>
+               <y>480</y>
+               <width>51</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>GITHUB</string>
+             </property>
+            </widget>
+           </widget>
+           <widget class="QWidget" name="tab_4">
+            <attribute name="title">
+             <string>Other</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="tab">
+            <attribute name="title">
+             <string>Reserve</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="tab_2">
+            <attribute name="title">
+             <string>Reserve</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="tab_5">
+            <attribute name="title">
+             <string>Reserve</string>
+            </attribute>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="0">
+        <widget class="Line" name="line_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1174</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionExit"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menuSetting">
+    <property name="title">
+     <string>Setting</string>
+    </property>
+    <addaction name="actionSet_Test_Count"/>
+    <addaction name="actionSet_Driver_Lock_Timeout"/>
+    <addaction name="actionSet_Timeout_After_Lock"/>
+    <addaction name="separator"/>
+    <addaction name="actionRun"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout_Me"/>
+    <addaction name="actionGitHub_URL"/>
+    <addaction name="separator"/>
+    <addaction name="actionWiki"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuSetting"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSet_Test_Count">
+   <property name="text">
+    <string>Set Test Count</string>
+   </property>
+  </action>
+  <action name="actionSet_Driver_Lock_Timeout">
+   <property name="text">
+    <string>Set Driver Lock Timeout</string>
+   </property>
+  </action>
+  <action name="actionSet_Timeout_After_Lock">
+   <property name="text">
+    <string>Set Timeout After Lock</string>
+   </property>
+  </action>
+  <action name="actionRun">
+   <property name="text">
+    <string>Run</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionAbout_Me">
+   <property name="text">
+    <string>About Me</string>
+   </property>
+  </action>
+  <action name="actionGitHub_URL">
+   <property name="text">
+    <string>GitHub URL</string>
+   </property>
+  </action>
+  <action name="actionWiki">
+   <property name="text">
+    <string>Wiki</string>
+   </property>
+  </action>
+ </widget>
+ <tabstops>
+  <tabstop>lineEdit_2</tabstop>
+  <tabstop>lineEdit_4</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>lineEdit_9</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>lineEdit_5</tabstop>
+  <tabstop>lineEdit_6</tabstop>
+  <tabstop>lineEdit_7</tabstop>
+  <tabstop>lineEdit_8</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>DataShow</tabstop>
+  <tabstop>tableWidget</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

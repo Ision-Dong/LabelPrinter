@@ -1,0 +1,113 @@
+QPushButton#pushButton_2:hover{
+        border-radius: 7px;
+        background-color: GREEN;
+        font-size: 18px;
+        color: white;
+        border: 2px solid gray;
+}
+QPushButton#pushButton_9:hover{
+        border-radius: 7px;
+        background-color: GREEN;
+        font-size: 13px;
+        color: white;
+        border: 2px solid gray;
+}
+
+QPushButton#pushButton_2{
+        background-color: RED;
+        width: 10px;
+        height: 30px;
+        border-radius: 7px;
+}
+
+QPushButton#pushButton_9{
+        background-color: RED;
+        width: 2px;
+        height: 30px;
+        border-radius: 7px;
+}
+
+QPushButton#pushButton_9:pressed
+{
+    background-color:rgb(14 , 135 , 228);
+    padding-left:3px;
+    padding-top:3px;
+}
+
+QPushButton#pushButton_2:pressed
+{
+    background-color:rgb(14 , 135 , 228);
+    padding-left:3px;
+    padding-top:3px;
+}
+
+QPushButton#pushButton_5 {
+    background-color: transparent;
+}
+
+QPushButton#pushButton_4 {
+    background-color: transparent;
+}
+
+QMainWindow{
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,stop:0 %s,stop:.9 %s);
+    border-radius: 7px;
+}
+QPushButton#pushButton_2:hover{
+border-radius: 7px;
+background-color: GREEN;
+font-size: 18px;
+color: white;
+border: 2px solid gray;
+}
+QPushButton#pushButton_9:hover{
+        border-radius: 7px;
+        background-color: GREEN;
+        font-size: 13px;
+        color: white;
+        border: 2px solid gray;
+}
+
+QPushButton#pushButton_2{
+        background-color: RED;
+        width: 10px;
+        height: 30px;
+        border-radius: 7px;
+}
+
+QPushButton#pushButton_9{
+        background-color: RED;
+        width: 2px;
+        height: 30px;
+        border-radius: 7px;
+}
+
+QPushButton#pushButton_9:pressed
+{
+    background-color:rgb(14 , 135 , 228);
+    padding-left:3px;
+    padding-top:3px;
+}
+
+QPushButton#pushButton_2:pressed
+{
+    background-color:rgb(14 , 135 , 228);
+    padding-left:3px;
+    padding-top:3px;
+}
+
+QPushButton#pushButton_5 {
+    background-color: transparent;
+}
+
+QPushButton#pushButton_4 {
+    background-color: transparent;
+}
+QTabWidget::pane{border-width:1px;border-color:gray;border-style: outset;background-color:white}
+QTabBar::tab{width:80px; border-width:1px;border-color:gray;border-bottom-color: #C2C7CB;border-top-left-radius: 15px;border-top-right-radius: 5px; font: 10px ; padding: 4px;}
+QTabBar::tab:first:selected{ margin-left: 0; font-weight: bold;margin-right: 0;color: white}
+QTabBar::tab:first:!selected {color: white;margin-left: 0; font-weight: bold;margin-right: 0;background-color:#DCDCDC}
+QTabBar::tab:middle:selected{ margin-left: 0; margin-right: 0;font-weight: bold;color: white}
+QTabBar::tab:middle:!selected {color: white;margin-left: 0; font-weight: bold;margin-right: 0;background-color:#DCDCDC}
+QTabBar::tab:last:selected{ margin-left: 0; margin-right: 0;font-weight: bold;color: white}
+QTabBar::tab:last:!selected {color: white;margin-left: 0; font-weight: bold;margin-right: 0;background-color:#DCDCDC}
