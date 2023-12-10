@@ -684,7 +684,7 @@ class Ui_MainWindow(QMainWindow):
         self.lineEdit_9.setText(self.config.get("delay", "open_delay"))
         self.lineEdit_10.setText(self.config.get("delay", "return_delay"))
         self.lineEdit_11.setText(self.config.get("delay", "close_delay"))
-        self.lineEdit_12.setText("1")
+        self.lineEdit_12.setText("5")
         self.lineEdit_12.RELATED_WIDGET = self.groupBox
 
         self.actionExit.setIcon(qtawesome.icon("mdi.exit-to-app", color='black'))
@@ -1119,16 +1119,15 @@ class Ui_MainWindow(QMainWindow):
         return status
 
     def print_thread(self):
-        event.clear()
+        # event.clear()
         t2 = threading.Thread(target=self.print)
         t2.start()
-        t2.join()
 
-        while True:
-            if event.is_set():
-                self.alert_message("Check sum checked failure. ")
-                break
-            time.sleep(1)
+        # while True:
+        #     if event.is_set():
+        #         self.alert_message("Check sum checked failure. ")
+        #         break
+        #     time.sleep(1)
 
     def print(self):
         # Disable all widgets.
@@ -1157,8 +1156,13 @@ class Ui_MainWindow(QMainWindow):
                 output("#######################   The next data   #######################", output_to=None)
                 try:
                     con.cmd_base = globals()[command].split(" ")
-                    con.send()
+                    con.send(timeout=1)
                     back = con.recv()
+
+                    if back == "":
+                        output(message="Run here--------------")
+                        output(message="No Content..")
+                        return
                     return_data[command] = back.replace(" ", "")
                     return_ = " ".join(back.split(" ")[5:-1])
                     return_data[command] = return_.replace(" ", "")
@@ -1183,26 +1187,39 @@ class Ui_MainWindow(QMainWindow):
                     self.comboBox_2.addItems(COM_PORTS)
                     return
 
+            result = []
+            for item in return_data.keys():
+                if item == 'CCID':
+                    continue
+
+                if return_data[item] != "":
+                    result.append(True)
+
             sn = return_data["MSN"].upper()
-            cur = DBConnector(**return_data)
-            cur.select()
-            all_msn = []
-            for d in cur.datas:
-                all_msn.append(d[1])
+            if all(result):
+                cur = DBConnector(**return_data)
+                cur.select()
+                all_msn = []
+                for d in cur.datas:
+                    all_msn.append(d[1])
 
-            if sn in all_msn:
-                cur.delete(sn)
+                if sn in all_msn:
+                    cur.delete(sn)
 
-            cur.insert(return_data["MSN"])
-            cur.update(sn)
-            cur.close()
+                cur.insert(return_data["MSN"])
+                cur.update(sn)
+                cur.close()
 
-            self.view_datas()
+                self.view_datas()
+            else:
+                return
 
-            try:
-                self.sendCommand(sn.replace(" ", ""))
-            except AttributeError:
-                ...
+        try:
+            self.sendCommand(sn.replace(" ", ""))
+        except AttributeError:
+            ...
+        except ValueError as ex:
+            output(message="No content..")
 
         buttons = self.main.findChildren(QPushButton)
         for button in buttons:
@@ -1248,9 +1265,24 @@ class Ui_MainWindow(QMainWindow):
         cur.close()
 
     def load_ports(self):
+
         print_port = self.config.get("ports", "print_port")
         taillock_port = self.config.get("ports", "taillock_port")
-        if print_port == "" and taillock_port == "":
+
+        try:
+            con = SerialServer(com=print_port)
+        except Exception:
+            print_port = ""
+
+        try:
+            con = SerialServer(com=taillock_port)
+        except Exception:
+            taillock_port = ""
+
+        if COM_PORTS == []:
+            self.alert_message(message="No com port ready, Please check")
+
+        if print_port == "" or taillock_port == "":
             try:
                 self.comboBox.addItems(COM_PORTS)
                 self.comboBox_2.addItems(COM_PORTS)
@@ -1281,9 +1313,37 @@ class Ui_MainWindow(QMainWindow):
         current = current_widget.currentIndex()
         current_widget.setCurrentIndex(current)
 
+        if self.comboBox.itemText(self.comboBox.currentIndex()) == self.comboBox_2.itemText(self.comboBox_2.currentIndex()):
+            self.alert_message("The com ports must be different !!!")
+            self.pushButton_8.setIcon(qtawesome.icon("fa.circle", color='red'))
+            self.pushButton_9.setIcon(qtawesome.icon("fa.circle", color='red'))
+
         self.config.set("ports", "print_port", self.comboBox.itemText(self.comboBox.currentIndex()))
         self.config.set("ports", "taillock_port", self.comboBox_2.itemText(self.comboBox_2.currentIndex()))
         self.config.write(open(self.config_path, "w"))
+
+        try:
+            con_list = [
+                self.config.get("ports", "print_port"),
+                self.config.get("ports", "taillock_port"),
+            ]
+
+            is_open_result = []
+
+            for port in con_list:
+                try:
+
+                    con = SerialServer(com=port)
+                    is_open_result.append(con.is_open())
+                    con.close()
+                except TypeError as ex:
+                    self.alert_message(message=ex)
+
+            if all(is_open_result):
+                self.pushButton_8.setIcon(qtawesome.icon("fa.circle", color='green'))
+                self.pushButton_9.setIcon(qtawesome.icon("fa.circle", color='green'))
+        except serial.serialutil.SerialException as ex:
+            pass
 
     def load_font(self):
         font = QFont(*eval(self.config.get("font", "family")))

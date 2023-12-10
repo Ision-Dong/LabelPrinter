@@ -49,12 +49,11 @@ class SerialServer:
         self.com = kwargs.get("com", "COM6")
         self.baud = kwargs.get("baud", 115200)
         self.output_to = kwargs.get("output_to", None)
-        try:
-            self.serial = serial.Serial(self.com, self.baud, timeout=0.5)
-        except serial.serialutil.SerialException as ex:
-            output(ex, level=logging.ERROR, output_to=self.output_to)
-            sys.exit(10)
+        self.serial = serial.Serial(self.com, self.baud, timeout=0.5)
         self.cmd_base = [self.CMD_1, self.CMD_2, self.CMD_3, self.CMD_4, self.CMD_5, self.CMD_6, self.CMD_7] if not kwargs.get("auto", False) else []
+
+    def is_open(self):
+        return self.serial.isOpen()
 
     def checksum(self, data, from_=2):
         """
