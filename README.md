@@ -18,3 +18,9 @@
 - Built complete,  Will generate two directory under LabelPrinter workspace.   `dist` and `build`
 
   - The new application is under `dist`, Copy the exe to LabelPrinter workspace.
+
+
+
+git clone https://github.com/Ision-Dong/LabelPrinter.git
+git pull https://github.com/Ision-Dong/LabelPrinter.git
+git push https://github.com/Ision-Dong/LabelPrinter.git
