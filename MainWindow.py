@@ -1156,12 +1156,10 @@ class Ui_MainWindow(QMainWindow):
                 output("#######################   The next data   #######################", output_to=None)
                 try:
                     con.cmd_base = globals()[command].split(" ")
-                    con.send(timeout=1)
+                    con.send()
                     back = con.recv()
 
                     if back == "":
-                        output(message="Run here--------------")
-                        output(message="No Content..")
                         return
                     return_data[command] = back.replace(" ", "")
                     return_ = " ".join(back.split(" ")[5:-1])

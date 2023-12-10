@@ -10,7 +10,8 @@
 
 - Pyinstaller installed complete,  Change to LabelPrinter workspace. And then execute below command to build:
 
-  - pyinstaller --onefile main.py --name=LabelPrinter --icon=icon/icon.ico
+  - pyinstaller --onefile main.py --name=LabelPrinter --icon=icon/icon.ico --noconsole
+  - pyinstaller --onefile main.py --name=LabelPrinter --icon=icon/icon.ico 
 
   
 
