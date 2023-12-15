@@ -622,7 +622,7 @@ class Ui_MainWindow(QMainWindow):
         self.actionSet_Transparency.setText(_translate("MainWindow", "Set Transparency"))
         self.actionSet_Window_Style.setText(_translate("MainWindow", "Set Window Style"))
         self.actionSet_Font.setText(_translate("MainWindow", "Set Font"))
-        self.actionRun.setText(_translate("MainWindow", "Run"))
+        self.actionRun.setText(_translate("MainWindow", "Reload"))
         self.actionAbout_Me.setText(_translate("MainWindow", "About Me"))
         self.pushButton_stop.setVisible(False)
 
@@ -631,7 +631,7 @@ class Ui_MainWindow(QMainWindow):
         self.actionSet_Transparency.triggered.connect(self.set_Transparency)
         self.actionSet_Window_Style.triggered.connect(self.reset_style)
         self.actionSet_Font.triggered.connect(self.set_family_font)
-        self.actionRun.triggered.connect(lambda : "")
+        self.actionRun.triggered.connect(self.reload)
         self.comboBox.activated[str].connect(self.set_comport)
         self.comboBox_2.activated[str].connect(self.set_comport)
         self.pushButton.clicked.connect(self.view_datas)
@@ -691,8 +691,8 @@ class Ui_MainWindow(QMainWindow):
         self.actionSet_Transparency.setIcon(qtawesome.icon("mdi.invert-colors", color='black'))
         self.actionSet_Window_Style.setIcon(qtawesome.icon("msc.symbol-color", color='black'))
         self.actionSet_Font.setIcon(qtawesome.icon("ei.fontsize", color='black'))
-        self.actionRun.setIcon(qtawesome.icon("msc.run-all", color='black'))
-        self.actionRun.setDisabled(True)
+        self.actionRun.setIcon(qtawesome.icon("mdi.reload", color='black'))
+
         self.actionAbout_Me.setIcon(qtawesome.icon("ei.info-circle", color='black'))
         self.pushButton_10.setIcon(qtawesome.icon("fa.circle", color='green', animation=qtawesome.Spin(self.pushButton_10)))
         self.pushButton_2.setIcon(qtawesome.icon("ri.printer-fill", color='red'))
@@ -721,6 +721,23 @@ class Ui_MainWindow(QMainWindow):
 
         self.load_font()
         self.load_ports()
+
+    def reload(self):
+        COM_PORTS = get_all_comports()
+        if len(COM_PORTS) < 2:
+            self.alert_message("Com Ports not ready! Please check!")
+            return
+
+        self.comboBox.addItems(COM_PORTS)
+        self.comboBox_2.addItems(COM_PORTS)
+
+    def com_port_check(self, port):
+        try:
+            con = SerialServer(com=port)
+            con.close()
+            return True
+        except Exception:
+            return False
 
     def update_commands(self):
         sub_labs = self.groupBox.findChildren(QLabel)
@@ -1262,13 +1279,16 @@ class Ui_MainWindow(QMainWindow):
         print_port = self.config.get("ports", "print_port")
         taillock_port = self.config.get("ports", "taillock_port")
 
+
         try:
             con = SerialServer(com=print_port)
+            con.close()
         except Exception:
             print_port = ""
 
         try:
             con = SerialServer(com=taillock_port)
+            con.close()
         except Exception:
             taillock_port = ""
 
@@ -1283,8 +1303,8 @@ class Ui_MainWindow(QMainWindow):
                 self.lineEdit.setText("115200")
                 self.lineEdit_2.setText("115200")
 
-                self.pushButton_8.setIcon(qtawesome.icon("fa.circle", color='green'))
-                self.pushButton_9.setIcon(qtawesome.icon("fa.circle", color='green'))
+                self.pushButton_8.setIcon(qtawesome.icon("fa.circle", color='red'))
+                self.pushButton_9.setIcon(qtawesome.icon("fa.circle", color='red'))
             except serial.SerialException:
                 ...
         else:
@@ -1296,8 +1316,6 @@ class Ui_MainWindow(QMainWindow):
             self.lineEdit_2.setText("115200")
             self.lineEdit.setDisabled(True)
             self.lineEdit_2.setDisabled(True)
-            # self.comboBox.setDisabled(True)
-            # self.comboBox_2.setDisabled(True)
             self.pushButton_8.setIcon(qtawesome.icon("fa.circle", color='green'))
             self.pushButton_9.setIcon(qtawesome.icon("fa.circle", color='green'))
 
@@ -1325,7 +1343,6 @@ class Ui_MainWindow(QMainWindow):
 
             for port in con_list:
                 try:
-
                     con = SerialServer(com=port)
                     is_open_result.append(con.is_open())
                     con.close()
