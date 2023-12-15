@@ -995,11 +995,15 @@ class Ui_MainWindow(QMainWindow):
         self.view_datas()
 
     def authorize(self):
-        con = SerialServer(
-            com=self.comboBox_2.itemText(self.comboBox_2.currentIndex()),
-            #   Get the args set from app.
-            output_to=None
-        )
+        try:
+            con = SerialServer(
+                com=self.comboBox_2.itemText(self.comboBox_2.currentIndex()),
+                #   Get the args set from app.
+                output_to=None
+            )
+        except Exception:
+            self.alert_message("Com Port not ready!")
+            return
         try:
             # Do auth
             auth = con.Do(con.AUTH, return_=True)
@@ -1009,35 +1013,44 @@ class Ui_MainWindow(QMainWindow):
             return
 
     def binding(self):
-        con = SerialServer(
-            com=self.comboBox_2.itemText(self.comboBox_2.currentIndex()),
-            #   Get the args set from app.
-            output_to=None
-        )
         try:
-            con.cmd_base = con.READ_SIM_ID.split(" ")  # .split(" ")  Convert command to arrary
-            con.send()
-            time.sleep(0.5)
+            try:
+                con = SerialServer(
+                    com=self.comboBox_2.itemText(self.comboBox_2.currentIndex()),
+                    #   Get the args set from app.
+                    output_to=None
+                )
+            except Exception:
+                self.alert_message("Com Port not ready!")
+                return
 
-            con.cmd_base = con.BINDING.split(" ")  # .split(" ")  Convert command to arrary
-            con.send()
-            time.sleep(0.5 * 14)
+            try:
+                con.cmd_base = con.READ_SIM_ID.split(" ")  # .split(" ")  Convert command to arrary
+                con.send()
+                time.sleep(0.5)
 
-            con.cmd_base = con.BINDING_COMPLETE.split(" ")
-            con.send()
-            time.sleep(0.5 * 4)
+                con.cmd_base = con.BINDING.split(" ")  # .split(" ")  Convert command to arrary
+                con.send()
+                time.sleep(0.5 * 14)
 
-            con.serial.reset_input_buffer()
+                con.cmd_base = con.BINDING_COMPLETE.split(" ")
+                con.send()
+                time.sleep(0.5 * 4)
 
-            con.cmd_base = con.LOCK_NUMBER.split(" ")
-            con.send()
-            time.sleep(0.5)
-            self.lineEdit_12.setText(str(int("0x"+con.recv().split(" ")[-2], base=16)))
-            self.lineEdit_12.setDisabled(True)
+                con.serial.reset_input_buffer()
 
-        except NonContentError:
-            self.alert_message("Did not get any content from current com port. \n-\tCom ports are ready? \n-\tor select a wrong com port?")
-            return
+                con.cmd_base = con.LOCK_NUMBER.split(" ")
+                con.send()
+                time.sleep(0.5)
+                self.lineEdit_12.setText(str(int("0x" + con.recv().split(" ")[-2], base=16)))
+                self.lineEdit_12.setDisabled(True)
+
+            except NonContentError:
+                self.alert_message(
+                    "Did not get any content from current com port. \n-\tCom ports are ready? \n-\tor select a wrong com port?")
+                return
+        except Exception as ex:
+            self.alert_message(message="Raise error here!")
 
     def painter(self):
         text_x = int(self.lineEdit_3.text())
