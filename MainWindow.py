@@ -717,6 +717,7 @@ class Ui_MainWindow(QMainWindow):
         self.tabWidget.setTabEnabled(3, False)
         self.tabWidget.setTabEnabled(4, False)
         self.tabWidget.setTabEnabled(5, False)
+        self.pushButton_3.setDisabled(True)
 
         self.load_font()
         self.load_ports()
@@ -984,14 +985,8 @@ class Ui_MainWindow(QMainWindow):
         )
         try:
             # Do auth
-            con.cmd_base = MSN.split(" ")  # .split(" ")  Convert command to arrary
-            con.send()
-            back = con.recv()
-
-            con.cmd_base = con.AUTH.split(" ") + back.split(" ") # .split(" ")  Convert command to arrary
-            con.send()
-            back = con.recv()
-            output("Return code: " + back, output_to=None)
+            auth = con.Do(con.AUTH, return_=True)
+            output("Return code: " + auth, output_to=None)
         except NonContentError:
             self.alert_message("Did not get any content from current com port. \n-\tCom ports are ready? \n-\tor select a wrong com port?")
             return
@@ -1045,7 +1040,7 @@ class Ui_MainWindow(QMainWindow):
                 qp.drawText(text_x * 1.88, 28 + line_height, "SN:F0F23600000000067700000011")
                 qp.drawText(text_x * 1.88, 48 + line_height, "MODEL CODE:")
                 qp.drawText(text_x * 1.88, 68 + line_height, "P604BFA06XXA")
-                qp.drawText(text_x * 1.88, 88 + line_height, "INPUT:DC5V/1A")
+                qp.drawText(text_x * 1.88, 88 + line_height, "INPUT:DC5V/2A")
                 qp.drawText(text_x * 1.88, 108 + line_height, "WWW.MOCOCHI.COM")
                 qp.drawText(text_x * 1.88, 128 + line_height, "MADE IN CHINA\t            10/23")
                 qp.fillRect(qr_x - 30, qr_y - 20, 70, 70, QBrush(Qt.SolidPattern))
@@ -1096,7 +1091,7 @@ class Ui_MainWindow(QMainWindow):
         sn = "SN:" + data
         model_code = "MODEL CODE:"
         model_code_content = self.lineEdit_7.text()
-        input = "INPUT:DC5V/1A"
+        input = "INPUT:DC5V/2A"
         access = "WWW.MOCOCHI.COM"
         made = "MADE IN CHINA"
         date = str(datetime.date(datetime.now()).month) + "/" + str(datetime.date(datetime.now()).year)[2:]

@@ -25,7 +25,7 @@ class SerialServer:
     CMD_8 = "00"
     CMD_9 = "00"
 
-    AUTH = "F2 F0 31 00 05 00 00"
+    AUTH = "F0 F2 A5 01 00 A6"
     UNLOCK_ALL = "F2 F0 31 00 05 00 01"
     SHUTDOWN = "F2 F0 31 00 05 00 03"
     READ_SIM_ID = "F0 F2 A1 01 00 A2"
