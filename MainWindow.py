@@ -1006,6 +1006,10 @@ class Ui_MainWindow(QMainWindow):
             return
         try:
             # Do auth
+            lock_number = self.lineEdit_12.text()
+            lock_number = str(hex(int(lock_number)))[2:].rjust(2, '0').upper()
+            con.AUTH = con.AUTH + f" {lock_number}"
+            con.AUTH = con.AUTH + " {}".format(con.checksum(con.AUTH.split(" ")[2:]).upper())
             auth = con.Do(con.AUTH, return_=True)
             output("Return code: " + auth, output_to=None)
         except NonContentError:

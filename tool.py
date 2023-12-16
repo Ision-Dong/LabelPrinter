@@ -25,7 +25,7 @@ class SerialServer:
     CMD_8 = "00"
     CMD_9 = "00"
 
-    AUTH = "F0 F2 A5 01 00 A6"
+    AUTH = "F0 F2 A5 01"
     UNLOCK_ALL = "F2 F0 31 00 05 00 01"
     SHUTDOWN = "F2 F0 31 00 05 00 03"
     READ_SIM_ID = "F0 F2 A1 01 00 A2"
@@ -53,7 +53,7 @@ class SerialServer:
         self.cmd_base = [self.CMD_1, self.CMD_2, self.CMD_3, self.CMD_4, self.CMD_5, self.CMD_6, self.CMD_7] if not kwargs.get("auto", False) else []
 
     def is_open(self):
-        return self.serial.isOpen()
+        return self.serial.is_open
 
     def checksum(self, data, from_=2):
         """
@@ -129,10 +129,17 @@ class SerialServer:
 
 
 if __name__ == '__main__':
-    s = SerialServer(com="COM6")    #   只需要传递com参数， baud 默认是115200
-    s.convert("499d", add_=True)    #    SN 转换格式
-    s.cmd_base.append(s.checksum(s.cmd_base))  #   把计算的checksum 加到 cmdbase
-    s.send()
-    content = s.recv()
-    output(content, level=logging.INFO)
-    s.close()
+    s = SerialServer(com=None)    #   只需要传递com参数， baud 默认是115200
+    # s.convert("499d", add_=True)    #    SN 转换格式
+    # s.cmd_base.append(s.checksum(s.cmd_base))  #   把计算的checksum 加到 cmdbase
+    # s.send()
+    # content = s.recv()
+    # output(content, level=logging.INFO)
+    # s.close()
+    # s.AUTH = (s.AUTH + " 00").split(" ")[2:]
+    # print(s.checksum(s.AUTH))
+    lock_number = "5"
+    lock_number = str(hex(int(lock_number)))[2:].rjust(2, '0').upper()
+    s.AUTH = s.AUTH + f" {lock_number}"
+    s.AUTH = s.AUTH + " {}".format(s.checksum(s.AUTH.split(" ")[2:]).upper())
+    print(s.AUTH)
