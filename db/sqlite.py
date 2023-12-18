@@ -28,7 +28,7 @@ class DBConnector:
 
     def __init_db(self):
         self.con.execute(
-            "create table if not exists labels(_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, MSN varchar unique)"
+            "create table if not exists labels(_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, MODEL_CODE varchar unique, MSN varchar unique)"
         )
         for column in self.args.keys():
             if column not in self.get_columns():

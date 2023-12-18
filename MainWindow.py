@@ -1214,6 +1214,8 @@ class Ui_MainWindow(QMainWindow):
                     self.comboBox_2.addItems(COM_PORTS)
                     return
 
+            return_data["MODEL_CODE"] = self.lineEdit_7.text()
+
             result = []
             for item in return_data.keys():
                 if item == 'CCID':
