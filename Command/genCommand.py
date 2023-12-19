@@ -150,8 +150,11 @@ class Command:
         del self
 
     def get_print_status(self):
-        while True:
+        times = 10
+        while times:
             status = self.connect.receive(1024)
+            if times == 0:
+                status = "fc6e6f"
             if status == "fc4f4b":  # fc4f4b   Print successful
                 output(message="Print successful.", level=logging.INFO)
                 return True
@@ -159,6 +162,7 @@ class Command:
                 output(message="Print failure.", level=logging.ERROR)
                 return False
             time.sleep(0.5)
+            times -= 1
 
 
 if __name__ == '__main__':

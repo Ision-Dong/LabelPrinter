@@ -28,7 +28,7 @@ class DBConnector:
 
     def __init_db(self):
         self.con.execute(
-            "create table if not exists labels(_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, MODEL_CODE varchar unique, MSN varchar unique)"
+            "create table if not exists labels(_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, IS_UPLOAD BOOLEAN DEFAULT 0, MODEL_CODE varchar, MSN varchar unique)"
         )
         for column in self.args.keys():
             if column not in self.get_columns():
@@ -88,7 +88,9 @@ class DBConnector:
             return
 
     def select(self, **expr):
-        select_sql = "select * from {}".format(expr.get("table_name", "labels"))
+        columns = self.get_columns()
+        columns.pop(columns.index(expr.get("skip", "IS_UPLOAD")))
+        select_sql = "select {} from {}".format(",".join(columns), expr.get("table_name", "labels"))
         if expr.get("MSN", None):
             select_sql += " where MSN = '{}'".format(expr.get("MSN"))
 
@@ -101,8 +103,15 @@ class DBConnector:
         self.cursor.execute(delete_sql)
         self.con.commit()
 
-    def update(self, sn=None):
+    def update(self, sn=None, column=None, column_value=None):
         update_sql = "update labels set %s='%s' WHERE MSN='%s';"
+
+        if column is not None:
+            command = update_sql % (column, column_value, sn)
+            self.cursor.execute(command)
+            self.con.commit()
+            return
+
         for key, value in self.args.items():
             command = update_sql % (key, value, sn)
             self.cursor.execute(command)
@@ -117,6 +126,14 @@ class DBConnector:
         for data in self.datas:
             if sn == data[1]:
                 return True
+        return False
+
+    def is_upload(self, sn=None):
+        is_upload_sql = "select IS_UPLOAD from labels where MSN='%s'" % sn
+        upload = self.cursor.execute(is_upload_sql).fetchone()
+        self.con.commit()
+        if upload[0] == 1:
+            return True
         return False
 
     def close(self):
