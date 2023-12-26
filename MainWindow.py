@@ -999,7 +999,7 @@ class Ui_MainWindow(QMainWindow):
         cursor = DBConnector()
         workbook = xlwt.Workbook(encoding="utf-8")
         sheet = workbook.add_sheet("device")
-        header = cursor.get_columns()
+        header = cursor.get_columns(skip="IS_UPLOAD")
         for i in header:
             sheet.write(0, header.index(i), i)
 

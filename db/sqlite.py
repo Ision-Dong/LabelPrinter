@@ -55,9 +55,11 @@ class DBConnector:
             self.con.execute("ALTER TABLE labels ADD COLUMN {} varchar;".format(column))
             self.con.commit()
 
-    def get_columns(self):
+    def get_columns(self, skip=None):
         columns = self.con.execute("PRAGMA table_info([labels]);").fetchall()
         all_columns = [c[1] for c in columns]
+        if skip is not None:
+            all_columns.pop(all_columns.index(skip))
         return all_columns
 
     def delete_column(self, column=None):
