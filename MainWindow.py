@@ -1005,7 +1005,7 @@ class Ui_MainWindow(QMainWindow):
 
         buttons = self.main.findChildren(QPushButton)
         for button in buttons:
-            if button != self.pushButton_7 and button != self.pushButton_8 and button != self.pushButton_9 and button != self.pushButton_10 and button != self.pushButton_2:
+            if button != self.pushButton_7 and button != self.pushButton_8 and button != self.pushButton_9 and button != self.pushButton_10:
                 button.setDisabled(False)
 
     def menushow(self, pos):
