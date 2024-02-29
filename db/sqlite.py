@@ -9,7 +9,12 @@ from utils.log import output
 
 class DBConnector:
 
-    PREFIX = "CMD"
+    """
+    #   通过原生sql语句，来操作数据库。
+    #   提供了 增删改查 的功能
+    """
+
+    PREFIX = "CMD"   # 已弃用
 
     def __init__(self, **kwargs):
         self.args = kwargs
@@ -35,6 +40,17 @@ class DBConnector:
                 self.add_column(column=column)
 
     def rename(self, prefix=None):
+        """
+        由于app 需求变化，该功能以弃用，该功能能重新命名字段名
+        操作步骤：
+          1.备份表
+          2.新建新表，用新的字段名
+          3.从旧表中拿到数据
+          4.把数据写到新表中
+          5.删除旧表
+        :param prefix:
+        :return:
+        """
         table_bak = "bak"
         re_name = "ALTER TABLE labels RENAME TO {};".format(table_bak)
         self.con.execute(re_name)
@@ -50,12 +66,21 @@ class DBConnector:
         self.con.commit()
 
     def add_column(self, column=None):
-
+        """
+        app中涉及到字段长度变化， 通过该方法来完成
+        :param column:
+        :return:
+        """
         if column:
             self.con.execute("ALTER TABLE labels ADD COLUMN {} varchar;".format(column))
             self.con.commit()
 
     def get_columns(self, skip=None):
+        """
+        #   获取数据库中所有字段名
+        :param skip: 如果这个不为空， 查询的数据中跳过对应的字段，目前仅涉及到的字段为: IS_UPLOAD
+        :return:
+        """
         columns = self.con.execute("PRAGMA table_info([labels]);").fetchall()
         all_columns = [c[1] for c in columns]
         if skip is not None:
@@ -73,7 +98,7 @@ class DBConnector:
             Only pass the device SN
         otherwise:
             Pass device SN & commands.
-        :param args:
+        :param args: device SN or more
         :return:
         """
         current_time = str(datetime.datetime.now()).split(".")[0]
@@ -91,7 +116,7 @@ class DBConnector:
 
     def select(self, **expr):
         columns = self.get_columns()
-        columns.pop(columns.index(expr.get("skip", "IS_UPLOAD")))
+        columns.pop(columns.index(expr.get("skip", "IS_UPLOAD")))  # IS_UPLOAD 这个字段不需要在页面中展示出来，所以在这里从字段列表中删除
         select_sql = "select {} from {}".format(",".join(columns), expr.get("table_name", "labels"))
         if expr.get("MSN", None):
             select_sql += " where MSN = '{}'".format(expr.get("MSN"))
@@ -131,6 +156,12 @@ class DBConnector:
         return False
 
     def is_upload(self, sn=None):
+        """
+        #   从main windows中用户的选择对应的行中，拿到sn，来查数据库。并返回true 或者false
+        #   IS_UPLOAD 这个字段标记对应行的数据是否传送到服务器中。
+        :param sn:
+        :return:
+        """
         is_upload_sql = "select IS_UPLOAD from labels where MSN='%s'" % sn
         upload = self.cursor.execute(is_upload_sql).fetchone()
         self.con.commit()

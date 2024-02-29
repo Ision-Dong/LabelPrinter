@@ -63,17 +63,32 @@ class LineEdit(QLineEdit):
     RELATED_WIDGET = None
 
     def focusOutEvent(self, a0: QtGui.QFocusEvent) -> None:
-        self.COMMNAD_LENGHT = int(self.text())
-        disable_child = self.RELATED_WIDGET.findChildren(QLineEdit)[3 + self.COMMNAD_LENGHT:]
-        enable_child = self.RELATED_WIDGET.findChildren(QLineEdit)[:3 + self.COMMNAD_LENGHT]
-        for child in enable_child:
-            child.setDisabled(False)
+        try:
+            self.COMMNAD_LENGHT = int(self.text())
+            if self.COMMNAD_LENGHT > 9 or self.COMMNAD_LENGHT < 1:
+                raise ValueError("")
 
-        for child in disable_child:
-            child.setDisabled(True)
+            disable_child = self.RELATED_WIDGET.findChildren(QLineEdit)[3 + self.COMMNAD_LENGHT:]
+            enable_child = self.RELATED_WIDGET.findChildren(QLineEdit)[:3 + self.COMMNAD_LENGHT]
+            for child in enable_child:
+                child.setDisabled(False)
+
+            for child in disable_child:
+                child.setDisabled(True)
+        except ValueError:
+            messageBox = QMessageBox(QMessageBox.Icon(3), "Error", "Lock Number must between 1 to 9 !", QMessageBox.Ok)
+            messageBox.button(QMessageBox.Ok).setText("yes")
+            reply = messageBox.exec()
+            from utils import log
+            if reply == QMessageBox.Ok:
+                return
 
 
 class Message(QThread):
+    """
+    # 通过线程来处理子窗口中遇到的需要弹出的error信息
+    # 最终绑定到主窗口上，通过主窗口来响应事件。 这样就解决了子窗口弹出窗口后主界面卡死的问题
+    """
     signal = pyqtSignal()
 
     def __init__(self, Window):
@@ -85,6 +100,11 @@ class Message(QThread):
 
 
 class Ui_MainWindow(QMainWindow):
+
+    """
+        Ui_MainWindow 由QT 生成
+        setupUi， retranslateUi 这两个方法下面的代码由QT生成，这两个方法下面的代码尽量不要去做改动
+    """
     def setupUi(self, MainWindow):
         self.main = MainWindow
         self.message = Message(self.main)
@@ -640,6 +660,10 @@ class Ui_MainWindow(QMainWindow):
         self.pushButton_stop.setVisible(False)
 
     def bind_actions(self):
+        """
+            按钮绑定事件全部在该方法下面处理
+        :return:
+        """
         self.actionExit.triggered.connect(self.exit)
         self.actionSet_Transparency.triggered.connect(self.set_Transparency)
         self.actionSet_Window_Style.triggered.connect(self.reset_style)
@@ -659,7 +683,10 @@ class Ui_MainWindow(QMainWindow):
         self.pushButton_stop.clicked.connect(self.stop)
 
     def init_window(self):
-
+        """
+            Main windows初始化的代码写在这个方法下面
+        :return:
+        """
         self.is_pause = False
         self.is_stop = False
 
@@ -726,6 +753,7 @@ class Ui_MainWindow(QMainWindow):
         self.tabWidget.setTabIcon(0, qtawesome.icon("mdi6.database-edit-outline", color='green'))
         self.tabWidget.setTabIcon(1, qtawesome.icon("mdi.apple-keyboard-command", color='green'))
 
+        self.tabWidget.setTabEnabled(1, False)
         self.tabWidget.setTabEnabled(2, False)
         self.tabWidget.setTabEnabled(3, False)
         self.tabWidget.setTabEnabled(4, False)
@@ -736,10 +764,16 @@ class Ui_MainWindow(QMainWindow):
         self.load_ports()
 
     def reload(self):
+        """
+         Main window -> setting -> reload， 点击重新从系统中抓取串口， 并将抓到的串口分配的两个commbox组件上面
+         如果抓取到的串口小于2个， 将弹出对话框提示用户，串口未准备好
+        :return:
+        """
+        self.comboBox.clear()
+        self.comboBox_2.clear()
         COM_PORTS = get_all_comports()
         if len(COM_PORTS) < 2:
             self.alert_message("Com Ports not ready! Please check!")
-            return
 
         self.comboBox.addItems(COM_PORTS)
         self.comboBox_2.addItems(COM_PORTS)
@@ -753,12 +787,35 @@ class Ui_MainWindow(QMainWindow):
             return False
 
     def update_commands(self):
+        """
+        该方法的功能暂未启用，该功能将在tabwidget的第二个option里面启用。
+        该方法将获取当前文件下的全局变量：
+        MSN = "F0 F2 A2 01 00 A3"
+        CCID = "F0 F2 A1 01 00 A2"
+        FID = "F0 F2 A3 01 00 A4"
+        LSN1 = "F0 F2 A4 01 01 A6"
+        LSN2 = "F0 F2 A4 01 02 A7"
+        LSN3 = "F0 F2 A4 01 03 A8"
+        LSN4 = "F0 F2 A4 01 04 A9"
+        LSN5 = "F0 F2 A4 01 05 AA"
+        LSN6 = "F0 F2 A4 01 06 AB"
+        LSN7 = "F0 F2 A4 01 07 AC"
+        LSN8 = "F0 F2 A4 01 08 AD"
+        LSN9 = "F0 F2 A4 01 09 AE"
+        并提供从主窗口来修改这些全局变量的方法
+        :return:
+        """
         sub_labs = self.groupBox.findChildren(QLabel)
         sub_edit = self.groupBox.findChildren(QLineEdit)
         for index, lab in enumerate(sub_labs):
+            # 修改全局变量
             globals()[lab.text()] = sub_edit[index].text()
 
     def set_delay(self):
+        """
+        设置flow中将涉及到的延迟时间， 并写到配置文件中
+        :return:
+        """
         self.config.set("delay", "test_count", self.lineEdit_8.text())
         self.config.set("delay", "open_delay", self.lineEdit_9.text())
         self.config.set("delay", "return_delay", self.lineEdit_10.text())
@@ -800,7 +857,7 @@ class Ui_MainWindow(QMainWindow):
             if button != self.pushButton_8 and button != self.pushButton_9 and button != self.pushButton_10:
                 button.setDisabled(False)
 
-    def flow_start(self):  #fisher
+    def flow_start(self):  # fisher
         output('\033[31m' + "[ EVENT REPORTING ] -> Flow Starting.....!" + '\033[0m')
         buttons = self.main.findChildren(QPushButton)
         for button in buttons:
@@ -817,11 +874,20 @@ class Ui_MainWindow(QMainWindow):
 
         #   Here has clicked the start button. Ready to start the flow.
         #   Create serial connector and connect the com port.
-        con = SerialServer(
-            com=self.comboBox_2.itemText(self.comboBox_2.currentIndex()),
-            #   Get the args set from app.
-            output_to=None
-        )
+        try:
+            con = SerialServer(
+                com=self.comboBox_2.itemText(self.comboBox_2.currentIndex()),
+                #   Get the args set from app.
+                output_to=None
+            )
+        except serial.serialutil.SerialException as ex:
+            self.pushButton_stop.setVisible(False)
+            self.pushButton_7.setText("Test Start")
+            self.pushButton_7.setIcon(qtawesome.icon("fa5s.play", color='red'))
+            self.error_message = "Com port not ready, Please check!"
+            self.message.start()
+            return
+
         globals()["CONNECT"] = con
         test_count = int(self.lineEdit_8.text())
 
@@ -955,6 +1021,8 @@ class Ui_MainWindow(QMainWindow):
             export.setIcon(qtawesome.icon("mdi.database-export", color='gray'))
             del_column = menu.addAction("Delete")
             del_column.setIcon(qtawesome.icon("fa.remove", color='gray'))
+            print_ = menu.addAction("Print")
+            print_.setIcon(qtawesome.icon("fa.print", color='gray'))
             action = menu.exec_(self.tableWidget.mapToGlobal(pos))
             try:
                 if action.text() == "Export":
@@ -965,6 +1033,8 @@ class Ui_MainWindow(QMainWindow):
                     self.__delete()
                 elif action.text() == "Clear":
                     self.__clear()
+                elif action.text() == "Print":
+                    self.__print()
                 elif action.text() == "Upload":
                     try:
                         self.upload()
@@ -972,6 +1042,14 @@ class Ui_MainWindow(QMainWindow):
                         ...
             except AttributeError:
                 pass
+
+    def __print(self):
+        msn = self.tableWidget.item(self.tableWidget.currentRow(), 2).text()
+        result = self.sendCommand(msn)
+        if not result:
+            self.error_message = "Print failure. Not got print status!"
+            self.message.start()
+            return
 
     def __clear(self):
         cur = DBConnector()
@@ -1041,10 +1119,23 @@ class Ui_MainWindow(QMainWindow):
             # Do auth
             lock_number = self.lineEdit_12.text()
             lock_number = str(hex(int(lock_number)))[2:].rjust(2, '0').upper()
+            if lock_number < "01" or lock_number > "09":
+                self.error_message = "Lock Number must between 1 to 9 !"
+                self.message.start()
+                return
+
             con.AUTH = con.AUTH + f" {lock_number}"
             con.AUTH = con.AUTH + " {}".format(con.checksum(con.AUTH.split(" ")[2:]).upper())
             auth = con.Do(con.AUTH, return_=True)
             output("Return code: " + " ".join(auth), output_to=None)
+
+            # Do auth return content.
+            if " ".join(auth) != con.AUTH:
+                self.error_message = "Auth return content check fail.\n '{}' != '{}'".format(" ".join(auth),
+                                                                                             str(con.AUTH))
+                self.message.start()
+                return
+
         except NonContentError:
             self.alert_message("Did not get any content from current com port. \n-\tCom ports are ready? \n-\tor select a wrong com port?")
             return
@@ -1080,7 +1171,7 @@ class Ui_MainWindow(QMainWindow):
                 con.send()
                 time.sleep(0.5)
                 self.lineEdit_12.setText(str(int("0x" + con.recv().split(" ")[-2], base=16)))
-                self.lineEdit_12.setDisabled(True)
+                # self.lineEdit_12.setDisabled(True)
 
             except NonContentError:
                 self.alert_message(
@@ -1248,6 +1339,10 @@ class Ui_MainWindow(QMainWindow):
                     self.comboBox.addItems(COM_PORTS)
                     self.comboBox_2.addItems(COM_PORTS)
                     return
+                except UnboundLocalError:
+                    self.error_message = "Com port not ready! Please check."
+                    self.message.start()
+                    return
 
             return_data["MODEL_CODE"] = self.lineEdit_7.text()
 
@@ -1286,6 +1381,7 @@ class Ui_MainWindow(QMainWindow):
         if return_data["MSN"] == "":
             self.error_message = "Not found MSN from printer port!"
             self.message.start()
+            return
         else:
             try:
                 result = self.sendCommand(sn.replace(" ", ""))
@@ -1302,7 +1398,7 @@ class Ui_MainWindow(QMainWindow):
     def __button_op(self, disable=True):
         buttons = self.main.findChildren(QPushButton)
         for button in buttons:
-            if button != self.pushButton_2 and button != self.pushButton_8 and button != self.pushButton_9 and button != self.pushButton_10 and button != self.pushButton_3:
+            if button != self.pushButton_8 and button != self.pushButton_9 and button != self.pushButton_10 and button != self.pushButton_3:
                 if disable:
                     button.setDisabled(False)
                 else:

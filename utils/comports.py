@@ -14,6 +14,7 @@ def get_comports():
             log.output("Got %s port from current system." % port.name, level=logging.DEBUG)
             return port.name
 
+
 def get_all_comports():
     """
     Detect the com port from current system. Please make sure your device has connected your system.

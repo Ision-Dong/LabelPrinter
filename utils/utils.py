@@ -8,11 +8,13 @@ def convert_to_hex(command:str):
         data += [int("0x" + data, 16) for data in line.strip().split(" ")]
     return data
 
+
 def is_chinese(char):
     if '\u4e00' <= char <= '\u9fff':
         return True
     else:
         return False
+
 
 def encode_to_gbk(content:str):
     result = []
@@ -25,6 +27,7 @@ def encode_to_gbk(content:str):
         result.append(" ".join(lines))
 
     return result
+
 
 def handle_y_coordinate(f):
 
@@ -39,8 +42,8 @@ def handle_y_coordinate(f):
         print(location)
         return f(*args, **kwargs)
 
-
     return wrapper
+
 
 if __name__ == '__main__':
     st = """S/N: 1234567890abcd1234567890 

@@ -8,6 +8,8 @@ class LineEditWithHistory(QtWidgets.QLineEdit):
     def __init__(self, parent):
         super(LineEditWithHistory, self).__init__(parent)
 
+        #   QLineEdit 历史回显功能。
+        #   回显数据来源于数据库的MODEL_CODE字段， 当为新用户时，数据库中没有数据，则历史回显为空
         self.db = DBConnector()
         self.inputList = []
         self.db.select()

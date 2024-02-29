@@ -25,6 +25,10 @@ class SerialServer:
     CMD_8 = "00"
     CMD_9 = "00"
 
+    #   需求变更，上面的指令以弃用
+    #   启用下面的指令
+    #   整个工装老化流程所涉及到的相关指令全部在这里
+    #   MainWindows中flow_start中的整个流程调用这里的指令。
     AUTH = "F0 F2 A5 01"
     UNLOCK_ALL = "F2 F0 31 00 05 00 01"
     SHUTDOWN = "F2 F0 31 00 05 00 03"
@@ -45,6 +49,10 @@ class SerialServer:
         """
         com: serial com port.
         baud: serial baud, default is 115200
+        :param auto: 通过auto来指定cmd_base的初始值，由于需求变更，cmd相关指令舍弃了，所以auto 这个参数现在开始传递False
+        :param com:
+        :param baud:
+        :param output_to: 将结果输出到
         """
         self.com = kwargs.get("com", "COM6")
         self.baud = kwargs.get("baud", 115200)
@@ -58,6 +66,12 @@ class SerialServer:
     def checksum(self, data, from_=2):
         """
         从cmd_base的from_位置开始计算checksum
+        ex:
+            self.checksum([11, 22, 33, 44, 55])
+        output:
+            2024-02-29 14:09:16,896 - log.py - INFO - Ready to compute: ['33', '44', '55'], The result is : ff
+            ff
+        ff 将补位到cmd_base的最后面
         :param data: 计算的数据，该参数为list type。
         :param from_: 从第几个开始计算
         :return:
@@ -66,7 +80,7 @@ class SerialServer:
         for d in data[:]:
             data_ = int(d, base=16)
             sum += data_
-
+        print(sum)
         last_bit = hex(sum)[2:] if len(hex(sum)) <= 4 else hex(sum)[-2:]   # 取最后一个bit位
         output("Ready to compute: {}, The result is : {}".format(data[from_:], last_bit), level=logging.INFO, output_to=self.output_to)
 
@@ -129,17 +143,17 @@ class SerialServer:
 
 
 if __name__ == '__main__':
-    s = SerialServer(com=None)    #   只需要传递com参数， baud 默认是115200
-    # s.convert("499d", add_=True)    #    SN 转换格式
-    # s.cmd_base.append(s.checksum(s.cmd_base))  #   把计算的checksum 加到 cmdbase
+    s = SerialServer(com=None)    # 只需要传递com参数， baud 默认是115200
+    # s.convert("499d", add_=True)    # SN 转换格式
+    # s.cmd_base.append(s.checksum(s.cmd_base))  # 把计算的checksum 加到 cmdbase
     # s.send()
     # content = s.recv()
     # output(content, level=logging.INFO)
     # s.close()
     # s.AUTH = (s.AUTH + " 00").split(" ")[2:]
-    # print(s.checksum(s.AUTH))
-    lock_number = "5"
-    lock_number = str(hex(int(lock_number)))[2:].rjust(2, '0').upper()
-    s.AUTH = s.AUTH + f" {lock_number}"
-    s.AUTH = s.AUTH + " {}".format(s.checksum(s.AUTH.split(" ")[2:]).upper())
-    print(s.AUTH)
+    print(s.checksum(["11", "22", "33", "44", "55"]))
+    # lock_number = "5"
+    # lock_number = str(hex(int(lock_number)))[2:].rjust(2, '0').upper()
+    # s.AUTH = s.AUTH + f" {lock_number}"
+    # s.AUTH = s.AUTH + " {}".format(s.checksum(s.AUTH.split(" ")[2:]).upper())
+    # print(s.AUTH)
